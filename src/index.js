@@ -21,13 +21,20 @@ io.on('connection', (socket)=>{
     socket.emit('message','Welcome!')
     socket.broadcast.emit('message','A new user has joined!')
 
-    socket.on('sendMessage',(message)=>{
+    socket.on('sendMessage',(message,callback)=>{
         io.emit('message',message)
+        callback('Delivered!')
+    })
+
+    socket.on('sendLocation',(coords,callback) => {
+        io.emit('message', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+        callback()
     })
 
     socket.on('disconnect',()=>{
         io.emit('message','A user has left!')
     })
+    
 })
 
 server.listen(port,()=>{
